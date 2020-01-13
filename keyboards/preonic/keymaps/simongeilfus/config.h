@@ -1,0 +1,7 @@
+#pragma once
+
+#undef AUTO_SHIFT_TIMEOUT
+#define AUTO_SHIFT_TIMEOUT 165
+
+#undef TAPPING_TERM
+#define TAPPING_TERM 175
