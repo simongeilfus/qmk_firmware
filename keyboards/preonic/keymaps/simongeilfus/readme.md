@@ -4,8 +4,10 @@ To make use of this file you will need follow the following steps:
 
 * Download or Clone QMK Firmware: <https://github.com/qmk/qmk_firmware/>
 * Extract QMK Firmware to a location on your hard drive
-* Copy this folder into %s
+* Run `util/qmk_install.sh`
 * You are now ready to compile or use your keymap with the source
+* Build & Flash firmware using `make preonic/rev3:simongeilfus:flash
+`
 
 More information can be found in the QMK docs: <https://docs.qmk.fm>
 
