@@ -24,7 +24,8 @@ enum layer_names {
 	L_LOWER,
 	L_RAISE,
 	L_ADJUST,
-	L_VISUALSTUDIO
+	L_VISUALSTUDIO,
+	L_GAME
 };
 
 #define L_B 		L_BASE
@@ -107,7 +108,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	/* ADJUST 
 	* ,-----------------------------------------------------------------------------------.
- 	* | Reset|      |      |      |      |      |      |      |      |      |      |EEProm|
+ 	* | Reset| BASE | GAME |      |      |      |      |      |      |      |      |EEProm|
  	* |------+------+------+------+------+------+------+------+------+------+------+------|
  	* |      |      |      |      |      |      |      |      |      |      |      |      |
  	* |------+------+------+------+------+-------------+------+------+------+------+------|
@@ -119,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* `-----------------------------------------------------------------------------------'
 	*/	
 	[L_ADJUST] = LAYOUT_preonic_1x2uC(
-		RESET,		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	EEP_RST,	\
+		RESET,		TO(L_BASE),	TO(L_GAME),	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	EEP_RST,	\
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	\
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	MU_ON,		MU_OFF,		MU_MOD,		\
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_ASON,	KC_ASOFF,	XXXXXXX,	\
@@ -146,7 +147,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		XXXXXXX,VS_PEEK_HEADER,	VS_HEADER,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  XXXXXXX, \
 		S(KC_F5), 	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  KC_F5, \
 		XXXXXXX,  	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,       XXXXXXX,       XXXXXXX,C(S(KC_F5)), STEPINTO,	  S(KC_F11),  KC_F10   \
-	)
+	),
+
+	/* GAME
+	* ,-----------------------------------------------------------------------------------.
+	* | ` ~  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  -   |
+	* |------+------+------+------+------+------+------+------+------+------+------+------|
+	* |  Esc |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+	* |------+------+------+------+------+------+------+------+------+------+------+------|
+	* | Tab  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
+	* |------+------+------+------+------+------+------+------+------+------+------+------|
+	* | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
+	* |------+------+------+------+------+------+------+------+------+------+------+------|
+	* | Ctrl |Macro1|      | Alt  |      |    Space    |  Base| Left | Down |  Up  | Right|
+	* `-----------------------------------------------------------------------------------'
+	*/
+	[L_GAME] = LAYOUT_preonic_1x2uC(
+		KC_GRAVE,	KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,	\
+		KC_ESC,		KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		KC_Y,		KC_U,		KC_I,		KC_O,		KC_P,		KC_BSPC,	\
+		KC_TAB,		KC_A,		KC_S,		KC_D,		KC_F,		KC_G,		KC_H,		KC_J,		KC_K,		KC_L,		KC_SCLN,	KC_QUOT,	\
+		KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_SLSH,	KC_SFTENT,	\
+		KC_LCTL,	DM_PLY1,	XXXXXXX,	KC_LALT,	XXXXXXX,		KC_SPC,				TO(L_B),	KC_LEFT,	KC_DOWN,	KC_UP,		KC_RIGHT	\
+		),
 };
 
 
