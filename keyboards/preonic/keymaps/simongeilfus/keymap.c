@@ -78,17 +78,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+-------------+------+------+------+------+------|
 	* |      | Home | NextW| PrevW|  End |      |      |   =  |   +  |   [  |   ]  |      |
 	* |------+------+------+------+------+------|------+------+------+------+------+------|
-	* |      |      |      |      |      |      |      |      |   -  |  ->  |   \  |      |
+	* |      |      |      |      |      |      |      |      |   -  |  ->  |      |      |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* |      |      |      |      |      |             |Adjust|      |      |      |      |
+	* |      |      |      |      |      |             |Adjust|   \  |      |      |      |
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_LOWER] = LAYOUT_preonic_1x2uC(
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_AMPR,	KC_ASTR,	KC_LPRN,	KC_RPRN,	KC_EQL,		\
 		XXXXXXX,	XXXXXXX,	KC_PGUP,	KC_PGDN,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PIPE,	KC_PSLS,	KC_LCBR,	KC_RCBR,	KC_DEL,		\
 		XXXXXXX,	KC_HOME,	C(KC_LEFT),	C(KC_RIGHT),KC_END,		XXXXXXX,	XXXXXXX,	KC_EQL,		KC_PPLS,	KC_LBRC,	KC_RBRC,	XXXXXXX,	\
-		_______,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PMNS,	M_PTR,		KC_BSLS,	_______,	\
-		_______,	DM_REC1,	XXXXXXX,	_______,	_______,		XXXXXXX,			MO(L_A),	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX		\
+		_______,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PMNS,	M_PTR,		XXXXXXX,	_______,	\
+		_______,	DM_REC1,	XXXXXXX,	_______,	_______,		XXXXXXX,			MO(L_A),	KC_BSLS,	XXXXXXX,	XXXXXXX,	XXXXXXX		\
 		),
 
 
