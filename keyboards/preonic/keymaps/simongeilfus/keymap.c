@@ -2,11 +2,16 @@
 #include "process_auto_shift.h"
 #include "tapdance.h"
 #include "utils.h"
+#ifdef AUDIO_ENABLE
+#include "audio.h"
+#endif
 
 enum preonic_keycodes {
 	M_PTR = SAFE_RANGE,
 	VS_HEADER,
-	VS_PEEK_HEADER
+	VS_PEEK_HEADER,
+	LS_BASE,
+	LS_GAME
 };
 
 enum tapdance_keycodes {
@@ -21,11 +26,11 @@ enum tapdance_keycodes {
 
 enum layer_names {
 	L_BASE = 0,
+	L_GAME,
 	L_LOWER,
 	L_RAISE,
 	L_ADJUST,
-	L_VISUALSTUDIO,
-	L_GAME
+	L_VISUALSTUDIO
 };
 
 #define L_B 		L_BASE
@@ -38,6 +43,9 @@ enum layer_names {
 #define POINTER 	TD(TD_POINTER)
 #define STEPINTO	TD(TD_STEP_INTO)
 
+float sound_base[][2] = SONG(DVORAK_SOUND);
+float sound_game[][2] = SONG(WORKMAN_SOUND);
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 	/* BASE
@@ -48,17 +56,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* | Tab  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | ShEsc|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |ShEntr|
+	* | ShEsc|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |  Up  |ShEntr|
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | Ctrl |Macro1| WIN  | Alt  |Lower |    Space    | Raise| Left | Down |  Up  | Right|
+	* | Ctrl |Macro1| WIN  | Alt  |Lower |    Space    | Raise|   /  | Left | Down | Right|
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_BASE] = LAYOUT_preonic_1x2uC(
 		KC_GRAVE,	KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,	\
 		POINTER,	KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		KC_Y,		KC_U,		KC_I,		KC_O,		KC_P,		KC_BSPC,	\
 		KC_TAB,		KC_A,		KC_S,		KC_D,		KC_F,		KC_G,		KC_H,		KC_J,		KC_K,		KC_L,		KC_SCLN,	KC_QUOT,	\
-		SHESC,		KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_SLSH,	KC_SFTENT,	\
-		KC_LCTL,	DM_PLY1,	KC_LGUI,	KC_LALT,	MO(L_L),		KC_SPC,				MO(L_R),	KC_LEFT,	KC_DOWN,	KC_UP,		KC_RIGHT	\
+		SHESC,		KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_UP,		KC_SFTENT,	\
+		KC_LCTL,	DM_PLY1,	KC_LGUI,	KC_LALT,	MO(L_L),		KC_SPC,				MO(L_R),	KC_SLSH,	KC_LEFT,	KC_DOWN,	KC_RIGHT	\
 		),
 
 
@@ -79,8 +87,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_AMPR,	KC_ASTR,	KC_LPRN,	KC_RPRN,	KC_EQL,		\
 		XXXXXXX,	XXXXXXX,	KC_PGUP,	KC_PGDN,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PIPE,	KC_PSLS,	KC_LCBR,	KC_RCBR,	KC_DEL,		\
 		XXXXXXX,	KC_HOME,	C(KC_LEFT),	C(KC_RIGHT),KC_END,		XXXXXXX,	XXXXXXX,	KC_EQL,		KC_PPLS,	KC_LBRC,	KC_RBRC,	XXXXXXX,	\
-		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PMNS,	M_PTR,		KC_BSLS,	XXXXXXX,	\
-		XXXXXXX,	DM_REC1,	XXXXXXX,	XXXXXXX,	_______,		XXXXXXX,			MO(L_A),	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX		\
+		_______,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PMNS,	M_PTR,		KC_BSLS,	_______,	\
+		_______,	DM_REC1,	XXXXXXX,	_______,	_______,		XXXXXXX,			MO(L_A),	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX		\
 		),
 
 
@@ -92,17 +100,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  	* |------+------+------+------+------+-------------+------+------+------+------+------|
  	* |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |MouseL|MouseD|MouseR|      |      |
  	* |------+------+------+------+------+------|------+------+------+------+------+------|
- 	* |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |      |      |      |      |      |
+ 	* |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |      |      |      | Vol+ |      |
  	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* |      |      |      |      |Adjust|             |      |      | Vol- | Vol+ |      |
+	* |      |      |      |      |Adjust|             |      |      |     |  Vol- |      |
 	* `-----------------------------------------------------------------------------------'
 	*/		
 	[L_RAISE] = LAYOUT_preonic_1x2uC(
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_UNDS,	\
 		XXXXXXX,	XXXXXXX,	KC_BTN3,	KC_BTN2,	KC_BTN1,	XXXXXXX,	XXXXXXX,	KC_WH_U,	KC_MS_U,	KC_WH_D,	XXXXXXX,	XXXXXXX,	\
 		XXXXXXX,	KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,		KC_MS_L,	KC_MS_D,	KC_MS_R,	XXXXXXX,	XXXXXXX,	\
-		XXXXXXX,	KC_F7,		KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	\
-		XXXXXXX,	DM_RSTP,	XXXXXXX,	XXXXXXX,	MO(L_A),		XXXXXXX,			_______,	XXXXXXX,	KC_VOLD,	KC_VOLU,	XXXXXXX		\
+		_______,	KC_F7,		KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_VOLU,	_______,	\
+		_______,	DM_RSTP,	XXXXXXX,	_______,	MO(L_A),		XXXXXXX,			_______,	XXXXXXX,	XXXXXXX,	KC_VOLD,	XXXXXXX		\
 		),
 
 
@@ -120,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* `-----------------------------------------------------------------------------------'
 	*/	
 	[L_ADJUST] = LAYOUT_preonic_1x2uC(
-		RESET,		TO(L_BASE),	TO(L_GAME),	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	EEP_RST,	\
+		RESET,		LS_BASE,	LS_GAME,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	EEP_RST,	\
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	\
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	MU_ON,		MU_OFF,		MU_MOD,		\
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_ASON,	KC_ASOFF,	XXXXXXX,	\
@@ -136,17 +144,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+-------------+------+------+------+------+------|
 	* |     |PHEADER|HEADER|      |      |      |      |      |      |      |      |      |
 	* |------+------+------+------+------+------|------+------+------+------+------+------|
-	* | STOP |      |      |      |      |      |      |      |      |      |      |CONTINUE|
+	* | STOP |      |      |      |      |      |      |      |      |      | SOUT |CONTINUE|
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* |      |      |      |      |      |             |      |RESTRT| SINTO| SOUT | SOVER|
+	* |      |      |      |      |      |             |      |      |RESTRT| SINTO| SOVER|
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_VISUALSTUDIO] = LAYOUT_preonic_1x2uC(
 		XXXXXXX,	KC_WBAK,	KC_WFWD,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  XXXXXXX, \
 		_______,	A(KC_F12),	KC_F12,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  C(A(KC_PAUSE)), \
 		XXXXXXX,VS_PEEK_HEADER,	VS_HEADER,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  XXXXXXX, \
-		S(KC_F5), 	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  KC_F5, \
-		XXXXXXX,  	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,       XXXXXXX,       XXXXXXX,C(S(KC_F5)), STEPINTO,	  S(KC_F11),  KC_F10   \
+		S(KC_F5), 	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	S(KC_F11),  KC_F5, \
+		XXXXXXX,  	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,       XXXXXXX,       XXXXXXX,  XXXXXXX,  C(S(KC_F5)),	STEPINTO,  KC_F10   \
 	),
 
 	/* GAME
@@ -157,20 +165,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* | Tab  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
+	* | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   Up |Enter |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | Ctrl |Macro1|      | Alt  |      |    Space    |  Base| Left | Down |  Up  | Right|
+	* | Ctrl |Macro1|      | Alt  |Lower |    Space    | Raise|   /  | Left | Down | Right|
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_GAME] = LAYOUT_preonic_1x2uC(
 		KC_GRAVE,	KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,	\
 		KC_ESC,		KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		KC_Y,		KC_U,		KC_I,		KC_O,		KC_P,		KC_BSPC,	\
 		KC_TAB,		KC_A,		KC_S,		KC_D,		KC_F,		KC_G,		KC_H,		KC_J,		KC_K,		KC_L,		KC_SCLN,	KC_QUOT,	\
-		KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_SLSH,	KC_SFTENT,	\
-		KC_LCTL,	DM_PLY1,	XXXXXXX,	KC_LALT,	XXXXXXX,		KC_SPC,				TO(L_B),	KC_LEFT,	KC_DOWN,	KC_UP,		KC_RIGHT	\
-		),
+		KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_UP,		KC_SFTENT,	\
+		KC_LCTL,	DM_PLY1,	XXXXXXX,	KC_LALT,	MO(L_L),		KC_SPC,				MO(L_R),	KC_SLSH,	KC_LEFT,	KC_DOWN,	KC_RIGHT	\
+		)
 };
-
 
 // Startup
 //______________________________________________________________________________
@@ -199,8 +206,8 @@ bool process_record_user( uint16_t keycode, keyrecord_t *record )
 	case VS_HEADER:
 		if( record->event.pressed ) {
 			register_code( KC_LCTL );
-			tap( KC_K );
-			tap( KC_O );
+			tap_code( KC_K );
+			tap_code( KC_O );
 			unregister_code( KC_LCTL );
 		}
 		return false;
@@ -208,9 +215,27 @@ bool process_record_user( uint16_t keycode, keyrecord_t *record )
 	case VS_PEEK_HEADER:
 		if( record->event.pressed ) {
 			register_code( KC_LCTL );
-			tap( KC_K );
-			tap( KC_J );
+			tap_code( KC_K );
+			tap_code( KC_J );
 			unregister_code( KC_LCTL );
+		}
+		return false;
+
+	case LS_BASE:
+		if( record->event.pressed ) {
+			default_layer_set( 1UL<<L_BASE );
+#ifdef AUDIO_ENABLE
+			PLAY_SONG( sound_base );
+#endif
+		}
+		return false;
+
+	case LS_GAME:
+		if( record->event.pressed ) {
+			default_layer_set( 1UL<<L_GAME );
+#ifdef AUDIO_ENABLE
+			PLAY_SONG( sound_game );
+#endif
 		}
 		return false;
 
