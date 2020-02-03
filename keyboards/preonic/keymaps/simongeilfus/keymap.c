@@ -104,7 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* |      |      |      |      |Adjust|             |      |      |     |  Vol- |      |
 	* `-----------------------------------------------------------------------------------'
-	*/		
+	*/
 	[L_RAISE] = LAYOUT_preonic_1x2uC(
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_UNDS,	\
 		XXXXXXX,	XXXXXXX,	KC_BTN3,	KC_BTN2,	KC_BTN1,	XXXXXXX,	XXXXXXX,	KC_WH_U,	KC_MS_U,	KC_WH_D,	XXXXXXX,	XXXXXXX,	\
@@ -114,7 +114,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		),
 
 
-	/* ADJUST 
+	/* ADJUST
 	* ,-----------------------------------------------------------------------------------.
  	* | Reset| BASE | GAME |      |      |      |      |      |      |      |      |EEProm|
  	* |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -126,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* |      |      |      |      |      |             |      |      | ASDN | ASUP | ASRP |
 	* `-----------------------------------------------------------------------------------'
-	*/	
+	*/
 	[L_ADJUST] = LAYOUT_preonic_1x2uC(
 		RESET,		LS_BASE,	LS_GAME,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	EEP_RST,	\
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	\
@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* | ____ | AF12 | F12  |      |      |      |      |      |      |      |      | BREAK|
 	* |------+------+------+------+------+-------------+------+------+------+------+------|
-	* |     |PHEADER|HEADER|      |      |      |      |      |      |      |      |      |
+	* |     |PHEADER|HEADER|      |      |      |      | Build| Debug|LivePP|      |      |
 	* |------+------+------+------+------+------|------+------+------+------+------+------|
 	* | STOP |      |      |      |      |      |      |      |      |      | SOUT |CONTINUE|
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -150,9 +150,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_VISUALSTUDIO] = LAYOUT_preonic_1x2uC(
-		XXXXXXX,	KC_WBAK,	KC_WFWD,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  XXXXXXX, \
+		XXXXXXX,    KC_WBAK,	KC_WFWD,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  XXXXXXX, \
 		_______,	A(KC_F12),	KC_F12,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  C(A(KC_PAUSE)), \
-		XXXXXXX,VS_PEEK_HEADER,	VS_HEADER,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  XXXXXXX, \
+		XXXXXXX,VS_PEEK_HEADER,	VS_HEADER,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  C(S(KC_B)),  KC_F5,		C(A(KC_F11)),  	XXXXXXX,  XXXXXXX, \
 		S(KC_F5), 	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	S(KC_F11),  KC_F5, \
 		XXXXXXX,  	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,       XXXXXXX,       XXXXXXX,  XXXXXXX,  C(S(KC_F5)),	STEPINTO,  KC_F10   \
 	),
@@ -193,7 +193,7 @@ void keyboard_post_init_user(void)
 // Process Record
 //______________________________________________________________________________
 
-bool process_record_user( uint16_t keycode, keyrecord_t *record ) 
+bool process_record_user( uint16_t keycode, keyrecord_t *record )
 {
 	switch (keycode) {
 	case M_PTR:
@@ -248,7 +248,7 @@ bool process_record_user( uint16_t keycode, keyrecord_t *record )
 
 	default:
 		// Process all other keycodes normally
-		return true; 
+		return true;
 	}
 }
 
@@ -262,23 +262,21 @@ static TapDance pointer_tap_state = {
   .state = 0
 };
 
-void pointer_tap_finished (qk_tap_dance_state_t *state, void *user_data) 
+void pointer_tap_finished (qk_tap_dance_state_t *state, void *user_data)
 {
 	pointer_tap_state.state = getDanceState(state);
   	switch (pointer_tap_state.state) {
-		case SINGLE_TAP: SEND_STRING( "->" ); break;
+     	case SINGLE_TAP: register_code(KC_F5); break;
      	case DOUBLE_TAP: register_code(KC_LCTL); register_code(KC_LSFT); register_code(KC_B); break;
-     	case TRIPLE_TAP: register_code(KC_F5); break;
 		case SINGLE_HOLD: layer_on(L_VISUALSTUDIO); break;
   	}
 }
 
-void pointer_tap_reset (qk_tap_dance_state_t *state, void *user_data) 
+void pointer_tap_reset (qk_tap_dance_state_t *state, void *user_data)
 {
   	switch (pointer_tap_state.state) {
-		case SINGLE_TAP: break;
+     	case SINGLE_TAP: unregister_code(KC_F5); break;
      	case DOUBLE_TAP: unregister_code(KC_LCTL); unregister_code(KC_LSFT); unregister_code(KC_B); break;
-     	case TRIPLE_TAP: unregister_code(KC_F5); break;
 		case SINGLE_HOLD: layer_off( L_VISUALSTUDIO ); break;
   	}
   	pointer_tap_state.state = 0;
