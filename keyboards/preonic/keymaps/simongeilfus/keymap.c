@@ -1,3 +1,11 @@
+/*
+* Download or Clone QMK Firmware: <https://github.com/qmk/qmk_firmware/>
+* Extract QMK Firmware to a location on your hard drive
+* Run `util/qmk_install.sh`
+* You are now ready to compile or use your keymap with the source
+* Build & Flash firmware using `make preonic/rev3:simongeilfus:flash
+*/
+
 #include QMK_KEYBOARD_H
 #include "process_auto_shift.h"
 #include "tapdance.h"
@@ -56,17 +64,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* | Tab  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | ShEsc|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |  Up  |ShEntr|
+	* | ShEsc|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |  /   |ShEntr|
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | Ctrl |Macro1| WIN  | Alt  |Lower |    Space    | Raise|   /  | Left | Down | Right|
+	* | Ctrl |      | WIN  | Alt  |Lower |    Space    | Raise| Left | Down |  Up  | Right|
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_BASE] = LAYOUT_preonic_1x2uC(
 		KC_GRAVE,	KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,	\
 		POINTER,	KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		KC_Y,		KC_U,		KC_I,		KC_O,		KC_P,		KC_BSPC,	\
 		KC_TAB,		KC_A,		KC_S,		KC_D,		KC_F,		KC_G,		KC_H,		KC_J,		KC_K,		KC_L,		KC_SCLN,	KC_QUOT,	\
-		SHESC,		KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_UP,		KC_SFTENT,	\
-		KC_LCTL,	DM_PLY1,	KC_LGUI,	KC_LALT,	MO(L_L),		KC_SPC,				MO(L_R),	KC_SLSH,	KC_LEFT,	KC_DOWN,	KC_RIGHT	\
+		SHESC,		KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_SLSH,	KC_SFTENT,	\
+		KC_LCTL,	XXXXXXX,	KC_LGUI,	KC_LALT,	MO(L_L),		KC_SPC,				MO(L_R),	KC_LEFT,	KC_DOWN,	KC_UP,      KC_RIGHT	\
 		),
 
 
@@ -74,21 +82,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* ,-----------------------------------------------------------------------------------.
 	* |      |      |      |      |      |      |      |   &  |   *  |   (  |   )  |  =   |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* |      |      | PGUP | PGDN |      |      |      |   |  |   /  |   {  |   }  |  Del |
+	* |      |      | PGUP | PGDN |      |      |      |   |  |   +  |   {  |   }  |  Del |
 	* |------+------+------+------+------+-------------+------+------+------+------+------|
-	* |      | Home | NextW| PrevW|  End |      |      |   =  |   +  |   [  |   ]  |      |
+	* |      | Home | NextW| PrevW|  End |      |      |      |   =  |   [  |   ]  |      |
 	* |------+------+------+------+------+------|------+------+------+------+------+------|
-	* |      |      |      |      |      |      |      |      |   -  |  ->  |      |      |
+	* |      |      |      |      |      |      |      |      |      |  ->  |      |      |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* |      |      |      |      |      |             |Adjust|   \  |      |      |      |
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_LOWER] = LAYOUT_preonic_1x2uC(
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_AMPR,	KC_ASTR,	KC_LPRN,	KC_RPRN,	KC_EQL,		\
-		XXXXXXX,	XXXXXXX,	KC_PGUP,	KC_PGDN,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PIPE,	KC_PSLS,	KC_LCBR,	KC_RCBR,	KC_DEL,		\
-		XXXXXXX,	KC_HOME,	C(KC_LEFT),	C(KC_RIGHT),KC_END,		XXXXXXX,	XXXXXXX,	KC_EQL,		KC_PPLS,	KC_LBRC,	KC_RBRC,	XXXXXXX,	\
-		_______,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PMNS,	M_PTR,		XXXXXXX,	_______,	\
-		_______,	DM_REC1,	XXXXXXX,	_______,	_______,		XXXXXXX,			MO(L_A),	KC_BSLS,	XXXXXXX,	XXXXXXX,	XXXXXXX		\
+		XXXXXXX,	XXXXXXX,	KC_PGUP,	KC_PGDN,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_PIPE,	KC_PPLS,	KC_LCBR,	KC_RCBR,	KC_DEL,		\
+		XXXXXXX,	KC_HOME,	C(KC_LEFT),	C(KC_RIGHT),KC_END,		XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_EQL,	    KC_LBRC,	KC_RBRC,	XXXXXXX,	\
+		_______,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	M_PTR,		KC_BSLS,	_______,	\
+		_______,	XXXXXXX,	XXXXXXX,	_______,	_______,		XXXXXXX,			MO(L_A),	KC_HOME,	KC_PGDN,	KC_PGUP,	KC_END		\
 		),
 
 
@@ -96,21 +104,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* ,-----------------------------------------------------------------------------------.
  	* |      |      |      |      |      |      |      |      |      |      |      |      |
  	* |------+------+------+------+------+------+------+------+------+------+------+------|
- 	* |      |M Btn3|M Btn2|M Btn1|      |      |      |WheelU|MouseU|WheelD|      |      |
+ 	* |      |      |WheelU|WheelD|      |      |      |  F1  |  F2  |  F3  |  F4  |      |
  	* |------+------+------+------+------+-------------+------+------+------+------+------|
- 	* |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |MouseL|MouseD|MouseR|      |      |
+ 	* |      | Left | Down |  Up  | Right|      |      |  F5  |  F6  |  F7  |  F8  |      |
  	* |------+------+------+------+------+------|------+------+------+------+------+------|
- 	* |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |      |      |      | Vol+ |      |
+ 	* |      |      |      |       |     |      |      |  F9  |  F10 |  F11 |  F12 |      |
  	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* |      |      |      |      |Adjust|             |      |      |     |  Vol- |      |
+	* |      |      |      |      |Adjust|             |      |      | Vol- | Vol+ |      |
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_RAISE] = LAYOUT_preonic_1x2uC(
 		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_UNDS,	\
-		XXXXXXX,	XXXXXXX,	KC_BTN3,	KC_BTN2,	KC_BTN1,	XXXXXXX,	XXXXXXX,	KC_WH_U,	KC_MS_U,	KC_WH_D,	XXXXXXX,	XXXXXXX,	\
-		XXXXXXX,	KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,		KC_MS_L,	KC_MS_D,	KC_MS_R,	XXXXXXX,	XXXXXXX,	\
-		_______,	KC_F7,		KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_VOLU,	_______,	\
-		_______,	DM_RSTP,	XXXXXXX,	_______,	MO(L_A),		XXXXXXX,			_______,	XXXXXXX,	XXXXXXX,	KC_VOLD,	XXXXXXX		\
+		XXXXXXX,	XXXXXXX,	KC_WH_U,	KC_WH_D,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_F1,		KC_F2,		KC_F3,		KC_F4,	    XXXXXXX,    \
+		XXXXXXX,	KC_LEFT,	KC_DOWN,	KC_UP,      KC_RIGHT,	XXXXXXX,	XXXXXXX,	KC_F5,		KC_F6,	    KC_F7,		KC_F8,	    XXXXXXX,	\
+		XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	XXXXXXX,	KC_F9,		KC_F10,		KC_F11,		KC_F12,	    XXXXXXX,	\
+		_______,	XXXXXXX,	XXXXXXX,	_______,	MO(L_A),		XXXXXXX,			_______,	XXXXXXX,	XXXXXXX,	KC_VOLD,	XXXXXXX		\
 		),
 
 
@@ -144,17 +152,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+-------------+------+------+------+------+------|
 	* |     |PHEADER|HEADER|      |      |      |      | Build| Debug|LivePP|      |      |
 	* |------+------+------+------+------+------|------+------+------+------+------+------|
-	* | STOP |      |      |      |      |      |      |      |      |      | SOUT |CONTINUE|
+	* | STOP |      |      |      |      |      |      |      |      |      |    |CONTINUE|
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* |      |      |      |      |      |             |      |      |RESTRT| SINTO| SOVER|
+	* |      |      |      |      |      |             |      |RESTRT| SINTO| SOUT | SOVER|
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_VISUALSTUDIO] = LAYOUT_preonic_1x2uC(
 		XXXXXXX,    KC_WBAK,	KC_WFWD,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  XXXXXXX, \
 		_______,	A(KC_F12),	KC_F12,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  C(A(KC_PAUSE)), \
-		XXXXXXX,VS_PEEK_HEADER,	VS_HEADER,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  C(S(KC_B)),  KC_F5,		C(A(KC_F11)),  	XXXXXXX,  XXXXXXX, \
-		S(KC_F5), 	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	S(KC_F11),  KC_F5, \
-		XXXXXXX,  	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,       XXXXXXX,       XXXXXXX,  XXXXXXX,  C(S(KC_F5)),	STEPINTO,  KC_F10   \
+		XXXXXXX,VS_PEEK_HEADER,	VS_HEADER,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  C(S(KC_B)),  KC_F5,		C(A(KC_F11)), XXXXXXX,  XXXXXXX, \
+		S(KC_F5), 	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,		XXXXXXX,  	XXXXXXX,  KC_F5, \
+		XXXXXXX,  	XXXXXXX,  	XXXXXXX,  	XXXXXXX,  XXXXXXX,       XXXXXXX,       XXXXXXX,  C(S(KC_F5)),	STEPINTO,  S(KC_F11), KC_F10   \
 	),
 
 	/* GAME
@@ -165,17 +173,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
 	* | Tab  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   Up |Enter |
+	* | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |  /   |Enter |
 	* |------+------+------+------+------+------+------+------+------+------+------+------|
-	* | Ctrl |Macro1|      | Alt  |Lower |    Space    | Raise|   /  | Left | Down | Right|
+	* | Ctrl |Macro1|      | Alt  |Lower |    Space    | Raise| Left | Down |  Up  | Right|
 	* `-----------------------------------------------------------------------------------'
 	*/
 	[L_GAME] = LAYOUT_preonic_1x2uC(
 		KC_GRAVE,	KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,	\
 		KC_ESC,		KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		KC_Y,		KC_U,		KC_I,		KC_O,		KC_P,		KC_BSPC,	\
 		KC_TAB,		KC_A,		KC_S,		KC_D,		KC_F,		KC_G,		KC_H,		KC_J,		KC_K,		KC_L,		KC_SCLN,	KC_QUOT,	\
-		KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_UP,		KC_SFTENT,	\
-		KC_LCTL,	DM_PLY1,	XXXXXXX,	KC_LALT,	MO(L_L),		KC_SPC,				MO(L_R),	KC_SLSH,	KC_LEFT,	KC_DOWN,	KC_RIGHT	\
+		KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_N,		KC_M,		KC_COMM,	KC_DOT,		KC_SLSH,	KC_ENTER,	\
+		KC_LCTL,	XXXXXXX,	XXXXXXX,	KC_LALT,	MO(L_L),		KC_SPC,				MO(L_R),	KC_LEFT,	KC_DOWN,	KC_UP,      KC_RIGHT	\
 		)
 };
 
